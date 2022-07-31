@@ -1,0 +1,74 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template to Create an IAM Role",
+    "Resources": {
+        "EcsInstanceRole1Resource": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+					"Version": "2008-10-17",
+					"Statement": [
+						{
+							"Sid": "",
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "ec2.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+                },
+                "Description": "Role for ec2 instances to acess EcsInstanceRole",
+                "Policies": [
+                    {
+                        "PolicyName": "EmbeddedInlinePolicy",
+                        "PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"ec2:DescribeTags",
+										"ecs:CreateCluster",
+										"ecs:DeregisterContainerInstance",
+										"ecs:DiscoverPollEndpoint",
+										"ecs:Poll",
+										"ecs:RegisterContainerInstance",
+										"ecs:StartTelemetrySession",
+										"ecs:UpdateContainerInstancesState",
+										"ecs:Submit*",
+										"ecr:GetAuthorizationToken",
+										"ecr:BatchCheckLayerAvailability",
+										"ecr:GetDownloadUrlForLayer",
+										"ecr:BatchGetImage",
+										"logs:CreateLogStream",
+										"logs:PutLogEvents"
+									],
+									"Resource": "*"
+								}
+							]
+                        }
+                    }
+                ],
+                "RoleName": "EcsInstanceRole1Role"
+            }
+        }
+    },
+    "Outputs": {
+        "RoleName": {
+            "Description": "Name of Created IAM Role",
+            "Value": {
+                "Ref": "EcsInstanceRole1Resource"
+            }
+        },
+        "RoleArn": {
+            "Description": "Arn of Created Role",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EcsInstanceRole1Resource",
+                    "Arn"
+                ]
+            }
+        }
+    }
+}

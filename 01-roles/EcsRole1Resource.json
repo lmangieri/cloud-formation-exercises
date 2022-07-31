@@ -1,0 +1,66 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template to Create an IAM Role",
+    "Resources": {
+        "Ecs1RoleResource": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+					"Version": "2008-10-17",
+					"Statement": [
+						{
+							"Sid": "",
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "ecs.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+                },
+                "Description": "Role for ECS",
+                "Policies": [
+                    {
+                        "PolicyName": "EmbeddedInlinePolicy",
+                        "PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"ec2:AuthorizeSecurityGroupIngress",
+										"ec2:Describe*",
+										"elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+										"elasticloadbalancing:DeregisterTargets",
+										"elasticloadbalancing:Describe*",
+										"elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+										"elasticloadbalancing:RegisterTargets"
+									],
+									"Resource": "*"
+								}
+							]
+                        }
+                    }
+                ],
+                "RoleName": "Ecs1Role"
+            }
+        }
+    },
+    "Outputs": {
+        "RoleName": {
+            "Description": "Name of Created IAM Role",
+            "Value": {
+                "Ref": "Ecs1RoleResource"
+            }
+        },
+        "RoleArn": {
+            "Description": "Arn of Created Role",
+            "Value": {
+                "Fn::GetAtt": [
+                    "Ecs1RoleResource",
+                    "Arn"
+                ]
+            }
+        }
+    }
+}

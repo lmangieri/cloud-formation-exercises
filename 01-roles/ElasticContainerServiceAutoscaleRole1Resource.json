@@ -1,0 +1,73 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template to Create an IAM Role",
+    "Resources": {
+        "ElasticContainerServiceAutoscaleRole1Resource": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+					"Version": "2008-10-17",
+					"Statement": [
+						{
+							"Sid": "",
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "application-autoscaling.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+                },
+                "Description": "Role for ECS",
+                "Policies": [
+                    {
+                        "PolicyName": "EmbeddedInlinePolicy",
+                        "PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"ecs:DescribeServices",
+										"ecs:UpdateService"
+									],
+									"Resource": [
+										"*"
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": [
+										"cloudwatch:DescribeAlarms",
+										"cloudwatch:PutMetricAlarm"
+									],
+									"Resource": [
+										"*"
+									]
+								}
+							]
+                        }
+                    }
+                ],
+                "RoleName": "ElasticContainerServiceAutoscale1Role"
+            }
+        }
+    },
+    "Outputs": {
+        "RoleName": {
+            "Description": "Name of Created IAM Role",
+            "Value": {
+                "Ref": "ElasticContainerServiceAutoscaleRole1Resource"
+            }
+        },
+        "RoleArn": {
+            "Description": "Arn of Created Role",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ElasticContainerServiceAutoscaleRole1Resource",
+                    "Arn"
+                ]
+            }
+        }
+    }
+}
