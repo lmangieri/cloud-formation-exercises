@@ -1,0 +1,8 @@
+{
+	"Parameters" : {
+		"VPCID" : "vpc-05aaa9e2c200144cb",
+		"ServiceName" : "ServiceEcsTest",
+		"ContainerCpu" : 256,
+		"ContainerMemory" : "0.5GB"
+	}
+}

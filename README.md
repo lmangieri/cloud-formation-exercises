@@ -1,3 +1,8 @@
+# Importante !
+
+Este exemplo de infraestrutura ECS é apenas para estudos; e estamos utilizando uma subnet pública; esta configuração não é indicada para produção !!!
+
+
 # Comandos Cloud formation
 
 ## Abaixo alguns comandos para ser executado dentro de 01-roles.
@@ -28,3 +33,7 @@ aws configure set region us-east-1
 
 ### Executando deploy da VPC e subnets 
 aws cloudformation deploy --template-file coreEcsInfra.yaml --stack-name coreEcsInfra --capabilities CAPABILITY_NAMED_IAM
+
+
+### Exemplo para utilizar arquivo externo de parâmetros
+aws cloudformation deploy --template-file 2_ecsInfra.yaml --parameter-overrides file://parameters.json --stack-name ecsInfraOnly --capabilities CAPABILITY_NAMED_IAM
