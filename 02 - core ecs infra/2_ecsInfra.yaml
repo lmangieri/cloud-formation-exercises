@@ -8,6 +8,11 @@ Parameters:
     VPCID:
         Description: Identificador do VPCID
         Type: String
+    ExecutionRole:
+        Description: Execution Role ARN; Neste exemplo estaremos usando a criada no ElasticContainerServiceTaskRole1Resource.json. Aqui configuramos o ARN da role que o ECS vai utilizar para inicializar a Task.
+        Type: String
+    Image:
+        Type: String
         
    # 256 (.25 vCPU) - Available memory values: 0.5GB, 1GB, 2GB
    # 512 (.5 vCPU) - Available memory values: 1GB, 2GB, 3GB, 4GB
@@ -28,6 +33,7 @@ Parameters:
         Description: How much memory the container will use
         Type: String
         Default: "0.5GB"
+    
 
 Resources:
     LogGroup:
@@ -35,6 +41,22 @@ Resources:
         Properties:
             LogGroupName: !Sub "/ecs/${ServiceName}"
             RetentionInDays: 14
+
+    TaskRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName: EcsTaskRole2
+          AssumeRolePolicyDocument:
+            Statement:
+              - Effect: Allow
+                Principal:
+                  Service: ecs-tasks.amazonaws.com
+                Action: 'sts:AssumeRole'
+          # ManagedPolicyArns:
+          #   -
+          # Policies:
+          #   -
+
             
     TaskDefinition:
         Type: AWS::ECS::TaskDefinition
@@ -44,4 +66,5 @@ Resources:
                 - FARGATE
             Cpu: !Ref ContainerCpu
             Memory: !Ref ContainerMemory
-            
+            ExecutionRoleArn: !Ref ExecutionRole
+            TaskRoleArn: !Ref TaskRole
