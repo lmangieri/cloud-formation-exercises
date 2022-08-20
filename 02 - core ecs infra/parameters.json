@@ -2,9 +2,9 @@
 	"Parameters" : {
 		"VPCID" : "vpc-05aaa9e2c200144cb",
 		"ServiceName" : "ServiceEcsTest",
-		"ContainerCpu" : 256,
+		"ContainerCpu" : "256",
 		"ContainerMemory" : "0.5GB",
-		"ExecutionRoleArn" : "arn:aws:iam::157351054870:role/ElasticContainerServiceTask1Role",
+		"ExecutionRole" : "arn:aws:iam::157351054870:role/ElasticContainerServiceTask1Role",
 		"Image" : "157351054870.dkr.ecr.us-east-1.amazonaws.com/spring-docker-exercise:2.0.1-SNAPSHOT"
 	}
 }

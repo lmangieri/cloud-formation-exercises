@@ -37,3 +37,6 @@ aws cloudformation deploy --template-file coreEcsInfra.yaml --stack-name coreEcs
 
 ### Exemplo para utilizar arquivo externo de parâmetros
 aws cloudformation deploy --template-file 2_ecsInfra.yaml --parameter-overrides file://parameters.json --stack-name ecsInfraOnly --capabilities CAPABILITY_NAMED_IAM
+
+
+Alguns TODOs: preciso parametrizar algumas ações feitas no 02 - core ecs infra... por exemplo uso das subnets e tudo mais....
