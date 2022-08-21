@@ -8,6 +8,12 @@ Parameters:
     VPCID:
         Description: Identificador do VPCID
         Type: String
+    SubnetIdOne:
+        Description: Identitificador da Subnet número 1 do cluster ECS
+        Type: String
+    SubnetIdTwo:
+        Description: Identitificador da Subnet número 2 do cluster ECS
+        Type: String
     ExecutionRole:
         Description: Execution Role ARN; Neste exemplo estaremos usando a criada no ElasticContainerServiceTaskRole1Resource.json. Aqui configuramos o ARN da role que o ECS vai utilizar para inicializar a Task.
         Type: String
@@ -33,7 +39,10 @@ Parameters:
         Description: How much memory the container will use
         Type: String
         Default: "0.5GB"
-    
+    ContainerPort:
+        Description: External container port
+        Type: Number
+        Default: 8080
 
 Resources:
     FargateAlbSG:
@@ -41,7 +50,7 @@ Resources:
         Properties:
             GroupDescription: Security Group for Fargate ALB
             GroupName: FargateAlbSG
-            VpcId: vpc-05aaa9e2c200144cb
+            VpcId: !Ref VPCID
             SecurityGroupIngress:
             - CidrIpv6: ::/0
               FromPort: 80
@@ -58,7 +67,7 @@ Resources:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
             GroupDescription: SG For Containers.
-            VpcId: vpc-05aaa9e2c200144cb
+            VpcId: !Ref VPCID
             GroupName: ContainersTestSG
             SecurityGroupIngress:
             - IpProtocol: -1
@@ -102,14 +111,14 @@ Resources:
                 - Name: "ContainerTestName"
                   Image: !Ref Image
                   PortMappings:
-                    - ContainerPort: 8080
+                    - ContainerPort: !Ref ContainerPort
                   MemoryReservation: 256
            
     MyFargateTargetGroup:
         Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
         Properties:
             Name: MyFargateTargetGroup
-            VpcId: vpc-05aaa9e2c200144cb
+            VpcId: !Ref VPCID
             Protocol: HTTP
             Port: 8080
             HealthCheckPath: /actuator/
@@ -122,6 +131,7 @@ Resources:
             
     MyECSService:
         Type: 'AWS::ECS::Service'
+        DependsOn: Listener
         Properties:
             LaunchType: FARGATE
             Cluster:
@@ -137,7 +147,7 @@ Resources:
                   AssignPublicIp: ENABLED
                   SecurityGroups:
                     - !GetAtt ContainersSG.GroupId
-                  Subnets: ['subnet-0d617157308097a12','subnet-0ba24a91d096c519d']
+                  Subnets: [!Ref SubnetIdOne,!Ref SubnetIdTwo]
             LoadBalancers:
               - TargetGroupArn:
                   Ref: MyFargateTargetGroup
@@ -150,8 +160,8 @@ Resources:
         Properties:
             Name: FargateAlb
             Subnets:
-                - subnet-0d617157308097a12
-                - subnet-0ba24a91d096c519d
+                - !Ref SubnetIdOne
+                - !Ref SubnetIdTwo
             Type: application
             SecurityGroups:
                 - !GetAtt FargateAlbSG.GroupId
@@ -167,4 +177,3 @@ Resources:
             LoadBalancerArn: !Ref FargateAlb
             Port: 80
             Protocol: HTTP
-            

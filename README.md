@@ -3,6 +3,11 @@
 Este exemplo de infraestrutura ECS é apenas para estudos; e estamos utilizando uma subnet pública; esta configuração não é indicada para produção !!!
 
 
+# Dicas sobre a criação de um cluster ECS:
+
+The Amazon ECS service requires an explicit dependency on the Application Load Balancer listener rule and the Application Load Balancer listener. This prevents the service from starting before the listener is ready.
+
+
 # Comandos Cloud formation
 
 ## Abaixo alguns comandos para ser executado dentro de 01-roles.

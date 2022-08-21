@@ -1,10 +1,13 @@
 {
 	"Parameters" : {
 		"VPCID" : "vpc-05aaa9e2c200144cb",
+		"SubnetIdOne" : "subnet-0d617157308097a12",
+		"SubnetIdTwo" : "subnet-0ba24a91d096c519d",
 		"ServiceName" : "ServiceEcsTest",
 		"ContainerCpu" : "256",
 		"ContainerMemory" : "0.5GB",
 		"ExecutionRole" : "arn:aws:iam::157351054870:role/ElasticContainerServiceTask1Role",
-		"Image" : "157351054870.dkr.ecr.us-east-1.amazonaws.com/spring-docker-exercise:2.0.1-SNAPSHOT"
+		"Image" : "157351054870.dkr.ecr.us-east-1.amazonaws.com/spring-docker-exercise:2.0.1-SNAPSHOT",
+		"ContainerPort" : "8080"
 	}
 }
